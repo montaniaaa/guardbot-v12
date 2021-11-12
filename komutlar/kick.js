@@ -1,27 +1,51 @@
-const Discord = require('discord.js')
-const db = require('quick.db')
-exports.run = async(client, message, args ) => {
-  
-let banlanıcak = message.mentions.users.first()
-let banlimit = await db.fetch(`kicklimit_${message.guild.id}`)
- let bansayı= await db.fetch(`kicksayı_${message.author.id}`)
-let guild = message.guild
-if (!banlanıcak) return message.channel.send(`Kişi Seç!`)
-  if (bansayı > banlimit) return message.channel.send(`Kick Sayın Limiti Geçtiği İçin Kickleyemem!`)
-  
-  let sebep = args.slice(1).join(' ')
-  if (!sebep) return message.channel.send('Sebep Belirt')
-  
-  message.channel.send(`Kullanıcı Başarıyla Kicklendi`)
-guild.members.kick(banlanıcak)
-  db.add(`kicksayı_${message.author.id}`, 1)
+const Discord = require('discord.js');
 
-  
-};
+exports.run = (client, message, args) => {
+
+
+        if(!message.member.hasPermission("KICK_MEMBERS")) return message.channel.send('Bunu kullanamazsınız!')
+        if(!message.guild.me.hasPermission("KICK_MEMBERS")) return message.channel.send('Doğru izinlere sahip değilim.')
+
+        const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+
+        if(!args[0]) return message.channel.send('Lütfen bir kullanıcı belirtin');
+
+        if(!member) return message.channel.send('Bu kullanıcıyı bulamıyor gibi görünüyor. Bunun için üzgünüm: /');
+        if(!member.kickable) return message.channel.send('Bu kullanıcı atılamaz. Ya bir mod / yönetici oldukları için ya da en yüksek rolleri benimkinden daha yüksek');
+
+        if(member.id === message.author.id) return message.channel.send('Bruh, kendine tekme atamazsın!');
+
+        let reason = args.slice(1).join(" ");
+
+        if(reason === undefined) reason = 'Belirtilmemiş';
+
+        member.kick(reason)
+        .catch(err => {
+            if(err) return message.channel.send('Bir şeyler yanlış gitti')
+        })
+
+        const kickembed = new Discord.MessageEmbed()
+        .setTitle('Üye Atıldı')
+        .setThumbnail(member.user.displayAvatarURL())
+        .addField('Kullanıcı Atıldı', member)
+        .addField('Tarafından Atıldı', message.author)
+        .addField('Sebebi', reason)
+        .setFooter('Kullanıcı Atıldı', client.user.displayAvatarURL())
+        .setTimestamp()
+
+        message.channel.send(kickembed);
+
+
+    }
 exports.conf = {
-  aliases: [],
-  permLevel: 0
+    enabled: true,
+    guildOnly: false,
+    aliases: ['kick'],
+    permLevel: 0
 };
+
 exports.help = {
-  name: 'kick'
-}; 
+    name: 'kick',
+    description: 'kick ',
+    usage: 'kick'
+};

@@ -4,28 +4,33 @@ exports.run = function(client, message) {
   
   let prefix  = ayarlar.prefix
 
+  
 const yardım = new Discord.MessageEmbed()
-.setColor('GREEN')
-.setAuthor(`Kob's Bot`)
-.setDescription(`
+.setColor('RANDOM')
+.setTitle(`${client.user.username} - Komutlarım`)
+.setDescription(`**\`Genel\`**
+» \`${prefix}avatar\`: **Avatarınızı Atar**
+» \`${prefix}say\`: **Üye Durum Grafiğini Gösterir**
+» \`${prefix}kullanıcı-bilgi\`: **Etiketlediğin & Kendi Profilin Hakkında Bilgi Verir**
 
+**\`Kayıt\`**
+» \`${prefix}erkek/kız <isim> <yas>\`: **Belirtilen Kullanıcıyı Kayıt Edersiniz**
+» \`${prefix}nick <isim> <yas>\`: **Belirtilen Kullanıcının İsmini Değiştirirsiniz**
+» \`${prefix}vip al/ver\`: **Kullanıcıya Vip Al/Ver**
 
-:white_small_square: **=**  \`!kanal-koruma\` : **Kanal Koruma Aç/Kapat**
-:white_small_square: **=**  \`!küfür-engel\`:  **Küfür Engel Aç/Kapat**
-:white_small_square: **=**  \`!reklam-engel\` :  **Reklam Engel Aç/Kapat**
-:white_small_square: **=**  \`!sohbet aç-kapat\` :  **Sohbeti Açıp Kapatırsınız**
-:white_small_square: **=**  \`!ban\`: **Belirttiğiniz Kişiyi Sunucudan Banlarsınız**
-:white_small_square: **=**  \`!unban\`:  **Belirttiğiniz Kişinin Banını Kaldırırsınız**
-:white_small_square: **=**  \`!istatistik\`:  **Botun İstatistiklerini Atar**
-:white_small_square: **=**  \`!temizle\`:  **Belirttiğiniz Sayıda Mesajı Siler**
-:white_small_square: **=**  \`!ping\`:  **Pinginizi Ölçüp Atar**
-:white_small_square: **=**  \`!avatar\`:  **Avatarınızı Atar**
+**\`Yetkili\`**
+» \`${prefix}ban <kullanıcı> <sebep>\`: **Belirtilen Kullanıcıyı Sunucudan Yasaklar**
+» \`${prefix}kick <kullanıcı> <sebep>\`: **Belirtilen Kullanıcıyı Sunucudan Atar**
+» \`${prefix}mute <kullanıcı> <süre> <sebep>\`: **Kullanıcıyı Belirtilen Süre Boyunca Sohbet Kanalında Susturur**
+» \`${prefix}ses-mute <kullanıcı> <süre> <sebep>\`: **Kullanıcıyı Belirtilen Süre Boyunca Sesli Kanalda Susturur**
+» \`${prefix}unban <id>\`: **Belirtilen İD Deki Kişinin Sunucudan Yasağını Kaldırır**
+» \`${prefix}temizle/sil <0-100>\`: **Belirtilen Miktarda Mesajı Siler**
+» \`${prefix}sohbet-aç/kapat\`: **Sohbet Aç/Kapat**
+» \`${prefix}ban-say\`: **Sunucudakı Banlanan Üye Sayısını Gösterir**`)
 
-`)
-.setImage("https://cdn.discordapp.com/attachments/729334114989375508/731237846173876294/OgunSert_Kobs.png")
-.setThumbnail(message.author.avatarURL())
+.setThumbnail(message.author.avatarURL({dynamic: true}))
+.setTimestamp()
 message.channel.send(yardım)
-
   
    
   
@@ -34,12 +39,12 @@ message.channel.send(yardım)
 exports.conf = {
   enabled: true,
   guildOnly: false, 
-  aliases: ['help'], 
+  aliases: [], 
   permLevel: 0
 };
 
 exports.help = {
   name: "yardım",
-  description: 'Bizim yaptığımız bir yardım kodu.',
+  description: 'yardım kodu.',
   usage: 'yardım'
 };

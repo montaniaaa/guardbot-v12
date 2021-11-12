@@ -1,31 +1,46 @@
-const Discord = require('discord.js')
-const db = require('quick.db')
-exports.run = async(client, message, args ) => {
+const Discord = require('discord.js');
+const fs = require('fs');
+  const db = require('quick.db');
+
+exports.run = async (client, message, args) => {
   
-let banlanıcak = args[0]
-let banlimit = await db.fetch(`banlimit_${message.guild.id}`)
- let bansayı= await db.fetch(`bansayı_${message.author.id}`)
-let guild = message.guild
-if (!banlanıcak) return message.channel.send(`İD Belirt`)
- if(isNaN(banlanıcak)) return message.channel.send(`Kullanıcı İD si Sadece Sayılardan Oluşabilir`)
-  
-  message.channel.send(`Kullanıcı Başarıyla UnBanlandı`)
-guild.members.unban(banlanıcak)
-  let kanal = await db.fetch(`banlog_${message.guild.id}`)
-  if (kanal) {
-    const sa = new Discord.MessageEmbed()
-    .setTitle('Kullanıcı UnBanlandı!')
-    .setDescription(` ${banlanıcak} İdli Kullanıcı <@${message.author.id}> Tarafından Sunucudan Yasağı Kaldırıldı`)
-    .setTimestamp()
-    client.channels.cache.get(kanal).send(sa)
-  }
+    
+  if (!message.member.hasPermission("BAN_MEMBERS")) return message.channel.send(`**Bu komutu kullanabilmek için "\`Üyeleri Yasakla\`" yetkisine sahip olmalısın.**`);
   
 
+  let user = args[0];
+  let reason = args.slice(1).join(' ');
+ if (isNaN(user)) return message.channel.send('**Lütfen Banını Açmak İstediğiniz Üyeninin ID sini Girin**');
+  if (reason.length < 1) return message.channel.send('**Lütfen Sebep Giriniz**');
+ 
+  
+  const embed = new Discord.MessageEmbed()
+  .setColor("#ffd100")
+  .addField('İşlem', 'Ban Kaldırma')
+  .addField('Banı Açılan Üye', `<@${user}>`)
+  .addField('Banı Açan Yetkili', `<@${message.author.username}#${message.author.discriminator}>`)
+  .addField('Banı Açma Sebebi', "```" + reason + "```")
+  client.channels.cache.get('764861681288609795').send(embed)///LOG KANAL İD YAZMALISIN
+  message.guild.members.unban(user);
+  
+
+  
+  const embed2 = new Discord.MessageEmbed()
+  .setColor("#ffd100")
+  .setDescription(`Belirtiğiniz İD'nin Banı Açıldı`)
+  message.channel.send(embed2)
+
+  
 };
 exports.conf = {
-  aliases: [],
-  permLevel: 0
+    enabled: true,
+    guildOnly: false,
+    aliases: ['unban','ban-kaldır'],
+    permLevel: 0
 };
+
 exports.help = {
-  name: 'unban'
-}; 
+    name: 'unban',
+    description: 'unban',
+    usage: 'unban'
+};

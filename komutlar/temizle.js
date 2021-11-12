@@ -24,7 +24,9 @@ return message.channel.send(sa2)
   }  
   
   message.channel.bulkDelete(silmek).then(() =>  {
-   message.channel.send(`${silmek} Kadar Mesaj ${message.author.tag} Tarafından Silindi`)
+   message.channel.send(`${silmek} Kadar Mesaj ${message.author.tag} Tarafından Silindi`).then(a => a.delete({timeout:3000}))
+
+message.delete()
 
   })
   
@@ -32,11 +34,14 @@ return message.channel.send(sa2)
 }
 
 exports.conf = {
-  
-  aliases: [],
-  permLevel: 0
+  enabled: true,
+  guildOnly: false,
+ aliases: ['temizle','sil'],
+  permLevel: 3
 };
 
 exports.help = {
-  name: 'temizle'
+  name: "temizle",
+  description: "temizle",
+  usage: "temizle"
 };
